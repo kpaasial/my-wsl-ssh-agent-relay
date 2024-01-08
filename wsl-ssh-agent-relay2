@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+set -u
+
+atexit () {
+    rm -f "$HOME/.ssh/wsl-ssh-agent.sock"
+}
+
+trap atexit EXIT
+
+
+WINUSERPROFILE="$(/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe '$env:USERPROFILE' | tr -d '\r')"
+
+
+WINUSERPROFILE="$(wslpath $(echo $WINUSERPROFILE ))"
+
+#echo $WINUSERPROFILE
+
+socat UNIX-LISTEN:"$HOME/.ssh/wsl-ssh-agent.sock",fork EXEC:"$WINUSERPROFILE/go/bin/npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork 	
