@@ -1,12 +1,11 @@
 [Unit]
-Description=Folding@home distributed computing client
+Description=WSL ssh agent relay service
 After=network.target
 
 [Service]
 Type=simple
 
-#ExecStartPre=/bin/bash -l -c 'env >/tmp/ingest.err'
-ExecStart=/home/kimmo/.local/bin/wsl-ssh-agent-relay2
+ExecStart=${HOME}/.local/bin/wsl-ssh-agent-relay2
 ExecStopPost=rm -f ${HOME}/.ssh/wsl-ssh-agent.sock
 PassEnvironment=USERPROFILE
 
